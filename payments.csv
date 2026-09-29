@@ -1,0 +1,6 @@
+policy_id,payment_date,amount,payment_method,payment_status,transaction_reference
+1,2026-01-01,15000,UPI,Success,TXN-1001
+2,2026-02-15,25000,Credit Card,Success,TXN-1002
+3,2026-03-01,12000,Net Banking,Success,TXN-1003
+4,2026-04-10,18000,UPI,Success,TXN-1004
+5,2026-05-20,8000,Debit Card,Success,TXN-1005

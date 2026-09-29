@@ -1,0 +1,6 @@
+customer_id,product_id,agent_id,policy_number,start_date,end_date,premium_amount,coverage_amount,policy_status
+1,1,1,POL-1001,2026-01-01,2026-12-31,15000,500000,Active
+2,2,2,POL-1002,2026-02-15,2027-02-14,25000,1000000,Active
+3,3,3,POL-1003,2026-03-01,2027-02-28,12000,500000,Active
+4,4,4,POL-1004,2026-04-10,2027-04-09,18000,750000,Active
+5,5,5,POL-1005,2026-05-20,2027-05-19,8000,300000,Active

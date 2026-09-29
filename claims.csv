@@ -1,0 +1,6 @@
+policy_id,claim_number,claim_date,claim_amount,approved_amount,claim_status,description
+1,CLM-1001,2026-04-15,45000,40000,Approved,Hospitalization claim for medical treatment
+2,CLM-1002,2026-05-20,120000,100000,Approved,Life insurance claim
+3,CLM-1003,2026-06-10,75000,0,Pending,Vehicle accident claim under review
+4,CLM-1004,2026-07-05,60000,55000,Approved,Home property damage claim
+5,CLM-1005,2026-08-12,25000,0,Rejected,Travel cancellation claim
