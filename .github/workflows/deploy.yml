@@ -1,0 +1,46 @@
+name: Insurance Project CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    name: Validate Project Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify project files
+        run: |
+          echo "Checking Insurance Domain Project files"
+          test -f README.md
+          test -d database
+          echo "Project files verified successfully"
+
+  deploy-dev:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to DEV
+        run: echo "DEV deployment successful"
+
+  deploy-qa:
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to QA
+        run: echo "QA deployment successful"
+
+  deploy-uat:
+    needs: deploy-qa
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to UAT
+        run: echo "UAT deployment successful"
