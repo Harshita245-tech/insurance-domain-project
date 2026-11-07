@@ -1,0 +1,687 @@
+{
+  "datasets": [
+    {
+      "name": "496890c0",
+      "displayName": "Customer Count Summary from Insurance Dataset",
+      "queryLines": [
+        "SELECT COUNT(*) AS total_customers\r\n",
+        "FROM insurance.gold.dim_customer; "
+      ]
+    },
+    {
+      "name": "75bce153",
+      "displayName": "Total Policies",
+      "queryLines": [
+        "SELECT COUNT(*) AS total_policies\r\n",
+        "FROM insurance.gold.fact_policy;"
+      ]
+    },
+    {
+      "name": "992bb60b",
+      "displayName": "Total Premium",
+      "queryLines": [
+        "SELECT SUM(premium_amount) AS total_premium\r\n",
+        "FROM insurance.gold.fact_policy;"
+      ]
+    },
+    {
+      "name": "50f482b2",
+      "displayName": "Total Claims",
+      "queryLines": [
+        "SELECT COUNT(*) AS total_claims\r\n",
+        "FROM insurance.gold.fact_claim;"
+      ]
+    },
+    {
+      "name": "4e0c9a71",
+      "displayName": "Claim Amount by Status",
+      "queryLines": [
+        "SELECT\r\n",
+        "    claim_status,\r\n",
+        "    SUM(claim_amount) AS total_claim_amount\r\n",
+        "FROM insurance.gold.fact_claim\r\n",
+        "GROUP BY claim_status\r\n",
+        "ORDER BY total_claim_amount DESC;"
+      ]
+    },
+    {
+      "name": "a1760845",
+      "displayName": "Payment Amount by Payment Method",
+      "queryLines": [
+        "SELECT\r\n",
+        "    payment_method,\r\n",
+        "    SUM(amount) AS total_payment\r\n",
+        "FROM insurance.gold.fact_payment\r\n",
+        "GROUP BY payment_method\r\n",
+        "ORDER BY total_payment DESC;"
+      ]
+    },
+    {
+      "name": "29673ac8",
+      "displayName": "Premium by Product",
+      "queryLines": [
+        "SELECT\r\n",
+        "    dp.product_name,\r\n",
+        "    SUM(fp.premium_amount) AS total_premium\r\n",
+        "FROM insurance.gold.fact_policy fp\r\n",
+        "JOIN insurance.gold.dim_product dp\r\n",
+        "    ON fp.product_key = dp.product_key\r\n",
+        "GROUP BY dp.product_name\r\n",
+        "ORDER BY total_premium DESC;"
+      ]
+    },
+    {
+      "name": "e134d2dd",
+      "displayName": "Coverage by Product",
+      "queryLines": [
+        "SELECT\r\n",
+        "    dp.product_name,\r\n",
+        "    SUM(fp.coverage_amount) AS total_coverage\r\n",
+        "FROM insurance.gold.fact_policy fp\r\n",
+        "JOIN insurance.gold.dim_product dp\r\n",
+        "    ON fp.product_key = dp.product_key\r\n",
+        "GROUP BY dp.product_name\r\n",
+        "ORDER BY total_coverage DESC;"
+      ]
+    },
+    {
+      "name": "f99f4823",
+      "displayName": "Policy Status",
+      "queryLines": [
+        "SELECT\r\n",
+        "    policy_status,\r\n",
+        "    COUNT(*) AS policy_count\r\n",
+        "FROM insurance.gold.fact_policy\r\n",
+        "GROUP BY policy_status\r\n",
+        "ORDER BY policy_count DESC;"
+      ]
+    },
+    {
+      "name": "df16d332",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        ""
+      ]
+    },
+    {
+      "name": "7419b1e8",
+      "displayName": "Untitled dataset 1",
+      "queryLines": [
+        ""
+      ]
+    },
+    {
+      "name": "6ae1c3f0",
+      "displayName": "Customer Location Details",
+      "queryLines": [
+        "SELECT\r\n",
+        "    customer_key,\r\n",
+        "    first_name,\r\n",
+        "    last_name,\r\n",
+        "    city,\r\n",
+        "    state\r\n",
+        "FROM insurance.gold.dim_customer\r\n",
+        "ORDER BY customer_key;"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "07c19269",
+      "displayName": "Insurance Analytics Dashboard",
+      "layout": [
+        {
+          "widget": {
+            "name": "total-customers",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "496890c0",
+                  "fields": [
+                    {
+                      "name": "sum(total_customers)",
+                      "expression": "SUM(`total_customers`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showDescription": false,
+                "showTitle": true,
+                "title": {
+                  "value": "Total Customers",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_customers)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "total-policies",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "75bce153",
+                  "fields": [
+                    {
+                      "name": "sum(total_policies)",
+                      "expression": "SUM(`total_policies`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "**Total Policies**",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_policies)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "total-premium",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "992bb60b",
+                  "fields": [
+                    {
+                      "name": "sum(total_premium)",
+                      "expression": "SUM(`total_premium`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "`Total Premium`\n<p>&nbsp;</p>\n",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_premium)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "total-claims",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "50f482b2",
+                  "fields": [
+                    {
+                      "name": "sum(total_claims)",
+                      "expression": "SUM(`total_claims`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Total claims\n<p>&nbsp;</p>\n",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_claims)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "claim-amount-by-status",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "4e0c9a71",
+                  "fields": [
+                    {
+                      "name": "claim_status",
+                      "expression": "`claim_status`"
+                    },
+                    {
+                      "name": "sum(total_claim_amount)",
+                      "expression": "SUM(`total_claim_amount`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "title": {
+                  "value": "`Claim Amount by Status`\n<p>&nbsp;</p>\n",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "claim_status",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_claim_amount)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 9,
+            "width": 12,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "payment-amount-by-payment-method",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a1760845",
+                  "fields": [
+                    {
+                      "name": "payment_method",
+                      "expression": "`payment_method`"
+                    },
+                    {
+                      "name": "sum(total_payment)",
+                      "expression": "SUM(`total_payment`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "`Payment Amount by Payment Method`",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "payment_method",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_payment)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "premium-by-product",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "29673ac8",
+                  "fields": [
+                    {
+                      "name": "product_name",
+                      "expression": "`product_name`"
+                    },
+                    {
+                      "name": "sum(total_premium)",
+                      "expression": "SUM(`total_premium`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "`Premium by Product`",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "product_name",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_premium)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 20,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "coverage-by-product",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e134d2dd",
+                  "fields": [
+                    {
+                      "name": "product_name",
+                      "expression": "`product_name`"
+                    },
+                    {
+                      "name": "sum(total_coverage)",
+                      "expression": "SUM(`total_coverage`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "`Coverage by Product`\n<p>&nbsp;</p>\n",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "product_name",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_coverage)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 26,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "policy-status",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "f99f4823",
+                  "fields": [
+                    {
+                      "name": "policy_status",
+                      "expression": "`policy_status`"
+                    },
+                    {
+                      "name": "sum(policy_count)",
+                      "expression": "SUM(`policy_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Policy Status\n<p>&nbsp;</p>\n",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "policy_status",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(policy_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 32,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "1c076450",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "6ae1c3f0",
+                  "fields": [
+                    {
+                      "name": "customer_key",
+                      "expression": "`customer_key`"
+                    },
+                    {
+                      "name": "first_name",
+                      "expression": "`first_name`"
+                    },
+                    {
+                      "name": "last_name",
+                      "expression": "`last_name`"
+                    },
+                    {
+                      "name": "city",
+                      "expression": "`city`"
+                    },
+                    {
+                      "name": "state",
+                      "expression": "`state`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": false
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "customer_key"
+                  },
+                  {
+                    "fieldName": "first_name"
+                  },
+                  {
+                    "fieldName": "last_name"
+                  },
+                  {
+                    "fieldName": "city"
+                  },
+                  {
+                    "fieldName": "state"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 3,
+            "width": 7,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
