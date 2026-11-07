@@ -4,25 +4,25 @@
 
 The Insurance Domain Data Engineering Project is an end-to-end data engineering and analytics solution designed to manage, process, transform, and visualize insurance data.
 
-The project uses a Medallion Architecture (Bronze, Silver, and Gold) in Databricks to process data from Supabase. The transformed Gold-layer data is used to build an interactive analytics dashboard in Databricks and a Power BI report.
+The project follows the Medallion Architecture (Bronze, Silver, and Gold) using Databricks to process data from Supabase. The transformed Gold-layer data is used to build an interactive analytics dashboard in Databricks and a Power BI report.
 
-The main objective is to create a reusable data pipeline that supports incremental data updates and provides meaningful insights into customers, policies, claims, payments, agents, and insurance products.
+The main objective is to build a reusable data pipeline that supports incremental data updates and provides meaningful insights into customers, policies, claims, payments, agents, and insurance products.
 
 ## 2. Technologies Used
 
 - **Supabase (PostgreSQL):** Source database.
 - **Databricks:** Data ingestion, processing, and transformation.
-- **PySpark / SQL:** Data processing and transformation.
+- **SQL / PySpark:** Data processing and transformation.
 - **Delta Tables:** Storage of processed data.
 - **Power BI:** Business intelligence and reporting.
 - **GitHub:** Source code management and version control.
-- **GitHub Actions:** CI/CD automation (implementation in progress).
+- **GitHub Actions:** CI/CD workflow automation.
 
 ## 3. Project Architecture
 
 The project follows the Medallion Architecture.
 
-**Source → Bronze → Silver → Gold → Dashboard → Power BI**
+**Source → Bronze → Silver → Gold → Databricks Dashboard → Power BI**
 
 ### Bronze Layer – Data Ingestion
 
@@ -30,6 +30,7 @@ The project follows the Medallion Architecture.
 - Maintains raw data in Bronze tables.
 - Includes ingestion queries for all six source tables.
 - Implements incremental customer ingestion using an `updated_at` timestamp and watermark tracking.
+- Supports new records and updated records.
 
 ### Silver Layer – Data Transformation
 
@@ -37,6 +38,7 @@ The project follows the Medallion Architecture.
 - Performs data cleaning and transformation.
 - Maintains structured and refined datasets.
 - Uses MERGE operations to handle new and updated customer records.
+- Ensures data consistency between Bronze and Silver layers.
 
 ### Gold Layer – Business-Level Data
 
@@ -67,7 +69,7 @@ The project uses six main source tables from Supabase:
 5. claims
 6. payments
 
-The database schema is available in the `database` folder.
+The database schema is maintained in the `database/schema.sql` file.
 
 ## 5. Incremental Data Processing
 
@@ -75,16 +77,19 @@ Incremental processing is implemented to capture customer record updates.
 
 An `updated_at` timestamp is maintained in the source customer table. When a customer record changes, the timestamp is updated automatically.
 
-The pipeline identifies changed records and propagates updates through the Bronze, Silver, and Gold layers.
+The pipeline identifies changed records and propagates updates through the Bronze, Silver, and Gold layers using MERGE operations.
 
-**Validation Example:**
+### Customer Update Validation
+
+A customer location update was successfully tested.
 
 - Customer ID: 7
 - Original city: Chennai
 - Updated city: Hyderabad
-- The updated location was verified in the Gold customer dimension table.
 
-This demonstrates the propagation of customer updates through the data pipeline.
+The updated location was successfully propagated through the Bronze, Silver, and Gold layers and verified in the Gold customer dimension table.
+
+The updated customer location was also displayed in the Databricks analytics dashboard.
 
 ## 6. Databricks Dashboard
 
@@ -103,50 +108,121 @@ The dashboard includes:
 - Policy Status
 - Customer Location Details
 
+The dashboard provides a consolidated view of insurance business performance.
+
 ## 7. Power BI Integration
 
 Power BI is integrated with Databricks to provide interactive business reporting.
 
 The Gold-layer dimension and fact tables are used to create a star-schema-based data model.
 
-The report includes customer, policy, premium, claim, payment, and product analytics.
+The Power BI report includes:
 
-Customer location details are also included to verify updated customer information.
+- Total Customers
+- Total Policies
+- Total Premium
+- Total Claims
+- Claim Amount by Status
+- Payment Amount by Payment Method
+- Premium by Product
+- Policy Status
+
+The report uses relationships between dimension and fact tables to support business analysis and visualization.
 
 ## 8. GitHub Version Control
 
-GitHub is used to maintain the project files, including:
+GitHub is used to maintain and manage the project files.
+
+The repository contains:
 
 - Database schema
 - Bronze SQL queries
 - Silver SQL queries
 - Gold SQL queries
+- Source CSV files
 - Databricks dashboard export
 - Power BI report
-- Project screenshots and documentation
+- Project screenshots
+- README documentation
+- GitHub Actions workflow
 
-## 9. CI/CD Pipeline – Implementation in Progress
+GitHub provides centralized source code management and version control for the project.
 
-The final project assignment is to implement CI/CD using GitHub Actions.
+## 9. CI/CD Pipeline Using GitHub Actions
 
-The planned workflow will automate the promotion of project changes across:
+GitHub Actions is used to implement a CI/CD workflow for the Insurance Domain Project.
 
-**Development (DEV) → Quality Assurance (QA) → User Acceptance Testing (UAT)**
+The workflow is maintained in:
 
-The workflow will use GitHub Actions to manage deployment steps and validate changes across environments.
+`.github/workflows/deploy.yml`
 
-This section will be updated after the CI/CD workflow is implemented and tested.
+### CI/CD Workflow Stages
+
+**1. Source Code Management**
+
+Project changes are maintained in the GitHub repository.
+
+**2. Continuous Integration**
+
+The workflow is automatically triggered when changes are pushed to the `main` branch or when a pull request targets `main`.
+
+**3. Project Validation**
+
+The workflow checks the availability of essential project files, including:
+
+- README.md
+- database folder
+
+**4. Deployment Workflow**
+
+After validation, the workflow executes three sequential stages:
+
+- **DEV:** Development deployment stage.
+- **QA:** Quality Assurance deployment stage.
+- **UAT:** User Acceptance Testing deployment stage.
+
+### CI/CD Workflow Diagram
+
+```mermaid
+flowchart TD
+    A[Developer] --> B[Push Changes to GitHub]
+    B --> C[GitHub Actions Trigger]
+    C --> D[Validate Project Files]
+    D --> E[DEV Stage]
+    E --> F[QA Stage]
+    F --> G[UAT Stage]
+    G --> H[Workflow Completed Successfully]
+```
+
+### Workflow Execution Result
+
+The GitHub Actions workflow was executed successfully.
+
+- **Workflow Name:** Insurance Project CI/CD
+- **Workflow File:** deploy.yml
+- **Branch:** main
+- **Execution Status:** Success
+- **Execution Time:** 25 seconds
+- **Validation Job:** Successful
+- **DEV Job:** Successful
+- **QA Job:** Successful
+- **UAT Job:** Successful
+
+The workflow execution and job results can be monitored through the GitHub Actions tab.
 
 ## 10. Project Outcomes
 
-- Implemented a Bronze, Silver, and Gold data architecture.
+- Implemented Bronze, Silver, and Gold data architecture.
 - Ingested six insurance-related source tables.
 - Implemented data transformation and incremental customer updates.
 - Created dimension and fact tables using a star-schema approach.
-- Developed a Databricks analytics dashboard.
+- Successfully tested customer location updates across the data layers.
+- Developed an interactive Databricks analytics dashboard.
 - Integrated Databricks Gold-layer data with Power BI.
+- Created Power BI visualizations for insurance analytics.
 - Maintained project SQL files, reports, and documentation in GitHub.
-- Preparing automated CI/CD deployment using GitHub Actions.
+- Implemented a GitHub Actions workflow with file validation and sequential DEV, QA, and UAT stages.
+- Successfully executed and verified the GitHub Actions workflow.
 
 ## 11. Repository Structure
 
@@ -173,12 +249,15 @@ insurance-domain-project/
 │
 ├── .github/
 │   └── workflows/
+│       └── deploy.yml
 │
 └── README.md
 ```
 
-*Note: The CI/CD workflow and final folder organization will be updated as implementation progresses.*
-
 ## 12. Conclusion
 
-This project demonstrates an end-to-end insurance data engineering and analytics workflow using Supabase, Databricks, SQL, Delta tables, Power BI, and GitHub. It provides a structured approach to data ingestion, transformation, incremental updates, and business reporting. The final phase focuses on automating deployment through GitHub Actions and implementing a Dev-to-QA-to-UAT CI/CD workflow.
+The Insurance Domain Data Engineering Project demonstrates an end-to-end insurance data engineering and analytics workflow using Supabase, Databricks, SQL, Delta tables, Power BI, GitHub, and GitHub Actions.
+
+The project covers source data ingestion, incremental processing, data transformation, dimensional modeling, business intelligence reporting, version control, and automated workflow execution.
+
+By combining data engineering and business intelligence technologies, the solution provides a structured and reusable approach to processing insurance data and generating meaningful business insights.
