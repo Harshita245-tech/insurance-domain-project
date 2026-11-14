@@ -1,3 +1,4 @@
+
 name: Insurance Project CI/CD
 
 on:
@@ -17,30 +18,54 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Verify project files
+      - name: Validate README file
+        run: test -f README.md
+
+      - name: Validate database folder
+        run: test -d database
+
+      - name: Validate SQL files
         run: |
-          echo "Checking Insurance Domain Project files"
-          test -f README.md
-          test -d database
-          echo "Project files verified successfully"
+          find database -type f -name "*.sql" | grep -q .
 
   deploy-dev:
+    name: Deploy to DEV
     needs: validate
     runs-on: ubuntu-latest
+
     steps:
-      - name: Deploy to DEV
-        run: echo "DEV deployment successful"
+      - name: Checkout DEV project files
+        uses: actions/checkout@v4
+
+      - name: Verify DEV project files
+        run: |
+          test -f README.md
+          test -d database
 
   deploy-qa:
+    name: Deploy to QA
     needs: deploy-dev
     runs-on: ubuntu-latest
+
     steps:
-      - name: Deploy to QA
-        run: echo "QA deployment successful"
+      - name: Checkout QA project files
+        uses: actions/checkout@v4
+
+      - name: Verify QA project files
+        run: |
+          test -f README.md
+          test -d database
 
   deploy-uat:
+    name: Deploy to UAT
     needs: deploy-qa
     runs-on: ubuntu-latest
+
     steps:
-      - name: Deploy to UAT
-        run: echo "UAT deployment successful"
+      - name: Checkout UAT project files
+        uses: actions/checkout@v4
+
+      - name: Verify UAT project files
+        run: |
+          test -f README.md
+          test -d database
